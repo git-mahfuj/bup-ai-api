@@ -20,18 +20,17 @@ export class ScenarioController {
     const { scenarioId } = req.params;
 
     if (!scenarioId) {
-      throw new ApiError(400, getSystemCustomErrorMsgByKey("SCENARIO_CREATION_FAILED"), undefined, [
-        "scenarioId is required",
-      ]);
+      throw new ApiError(
+        400,
+        getSystemCustomErrorMsgByKey("SCENARIO_CREATION_FAILED"),
+        undefined,
+        ["scenarioId is required"]
+      );
     }
 
-    const scenario = await this.scenarioService.getScenario(scenarioId as string);
-
-    if (!scenario) {
-      throw new ApiError(404, getSystemCustomErrorMsgByKey("SCENARIO_NOT_FOUND"), undefined, [
-        `Scenario '${scenarioId}' not found`,
-      ]);
-    }
+    const scenario = await this.scenarioService.getScenario(
+      scenarioId as string
+    );
 
     res.status(200).json(scenario);
   };

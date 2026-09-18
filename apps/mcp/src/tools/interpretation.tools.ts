@@ -1,8 +1,9 @@
 import { McpRegistrar } from "@/blueprints";
 import { asyncToolHandler, MCPToolException, MCPToolResponse } from "@/lib";
-import { InterpretNotesZSchema, type InterpretNotesInput } from "@/zod";
+import { InterpretNotesZSchema, type InterpretNotesInput } from "@repo/zod";
 import { groqClient, GROQ_MODEL } from "@/lib";
-import { DirectiveInterpretationArraySchema } from "@/zod";
+import { DirectiveInterpretationArraySchema } from "@repo/zod";
+import { extractJson } from "@/utils/validjsonparser";
 
 const SYSTEM_PROMPT = `You are the operator-note interpretation module for a smart-campus energy optimizer.
 
@@ -94,7 +95,8 @@ const interpretOperatorNotesTool = async (payload: InterpretNotesInput) => {
 
   let parsed: unknown;
   try {
-    parsed = JSON.parse(raw);
+    parsed = JSON.parse(extractJson(raw));
+    console.log("haha error here: ", parsed);
   } catch {
     throw new MCPToolException(
       "Model returned non-JSON output",
@@ -119,7 +121,10 @@ const interpretOperatorNotesTool = async (payload: InterpretNotesInput) => {
 
   const seen = new Set<number>();
   for (const entry of result.data) {
-    if (entry.note_index >= operator_notes.length || seen.has(entry.note_index)) {
+    if (
+      entry.note_index >= operator_notes.length ||
+      seen.has(entry.note_index)
+    ) {
       throw new MCPToolException(
         `Invalid or duplicate note_index: ${entry.note_index}`,
         NoteInterpretationTools.InterpretNotesToolName

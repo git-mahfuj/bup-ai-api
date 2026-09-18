@@ -3,12 +3,12 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-        "experimentalDecorators": true,
+    "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "types"],
+  "include": ["src", "types", "../mcp/src/utils/validjsonparser.ts"],
   "exclude": ["dist", "build"]
 }

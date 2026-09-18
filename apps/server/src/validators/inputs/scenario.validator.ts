@@ -8,7 +8,7 @@ import type z from "zod";
 export class ScenarioInputValidators extends Validator {
   optimizeEnergyInput(
     payload: OptimizeEnergyRequest
-  ): z.ZodError | OptimizeEnergyRequest  {
+  ): z.ZodError | OptimizeEnergyRequest {
     const { data, success, error } = this.validate(
       payload,
       ScenarioZSchema.OptimizeEnergyRequest

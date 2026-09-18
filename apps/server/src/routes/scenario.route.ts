@@ -15,7 +15,6 @@ export class ScenarioRouter implements IRouter {
   }
 
   createRouters(): void {
-
     this.router.post(
       "/optimize-energy",
       this.scenarioController.optimizeEnergy.bind(this.scenarioController)

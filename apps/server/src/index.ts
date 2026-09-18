@@ -55,7 +55,7 @@ const apiRouter = container.get(ApiRouter);
 apiRouter.createRouters();
 app.use("/api", apiRouter.getRouters());
 app.get("/health", async (_, res) => {
-  return res.status(200).json(new ApiResponse(200, "OK")); 
+  return res.status(200).json(new ApiResponse(200, "OK"));
 });
 
 app.get("/metrics", async (_req, res) => {

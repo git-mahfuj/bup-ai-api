@@ -2,16 +2,10 @@
   "version": "8",
   "dialect": "postgres",
   "id": "4b1adfd9-80f7-4a49-a977-612e26244756",
-  "prevIds": [
-    "00000000-0000-0000-0000-000000000000"
-  ],
+  "prevIds": ["00000000-0000-0000-0000-000000000000"],
   "ddl": [
     {
-      "values": [
-        "charge",
-        "discharge",
-        "idle"
-      ],
+      "values": ["charge", "discharge", "idle"],
       "name": "battery_action",
       "entityType": "enums",
       "schema": "public"
@@ -619,14 +613,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "scenario_id"
-      ],
+      "columns": ["scenario_id"],
       "schemaTo": "public",
       "tableTo": "scenarios",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "NO ACTION",
       "name": "batteries_scenario_id_scenarios_id_fkey",
@@ -636,14 +626,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "scenario_id"
-      ],
+      "columns": ["scenario_id"],
       "schemaTo": "public",
       "tableTo": "scenarios",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "NO ACTION",
       "name": "directive_interpretations_scenario_id_scenarios_id_fkey",
@@ -653,14 +639,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "scenario_id"
-      ],
+      "columns": ["scenario_id"],
       "schemaTo": "public",
       "tableTo": "scenarios",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "NO ACTION",
       "name": "hourly_inputs_scenario_id_scenarios_id_fkey",
@@ -670,14 +652,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "scenario_id"
-      ],
+      "columns": ["scenario_id"],
       "schemaTo": "public",
       "tableTo": "scenarios",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "NO ACTION",
       "name": "hourly_plans_scenario_id_scenarios_id_fkey",
@@ -687,14 +665,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "scenario_id"
-      ],
+      "columns": ["scenario_id"],
       "schemaTo": "public",
       "tableTo": "scenarios",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "NO ACTION",
       "name": "operator_notes_scenario_id_scenarios_id_fkey",
@@ -704,14 +678,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "scenario_id"
-      ],
+      "columns": ["scenario_id"],
       "schemaTo": "public",
       "tableTo": "scenarios",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "NO ACTION",
       "name": "optimization_results_scenario_id_scenarios_id_fkey",
@@ -720,9 +690,7 @@
       "table": "optimization_results"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "batteries_pkey",
       "schema": "public",
@@ -730,9 +698,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "directive_interpretations_pkey",
       "schema": "public",
@@ -740,9 +706,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "hourly_inputs_pkey",
       "schema": "public",
@@ -750,9 +714,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "hourly_plans_pkey",
       "schema": "public",
@@ -760,9 +722,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "operator_notes_pkey",
       "schema": "public",
@@ -770,9 +730,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "optimization_results_pkey",
       "schema": "public",
@@ -780,9 +738,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "scenarios_pkey",
       "schema": "public",
@@ -791,9 +747,7 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "scenario_id"
-      ],
+      "columns": ["scenario_id"],
       "nullsNotDistinct": false,
       "name": "optimization_results_scenario_id_key",
       "schema": "public",
@@ -802,9 +756,7 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "scenario_id"
-      ],
+      "columns": ["scenario_id"],
       "nullsNotDistinct": false,
       "name": "scenarios_scenario_id_key",
       "schema": "public",

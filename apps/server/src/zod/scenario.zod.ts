@@ -2,7 +2,6 @@ import { z } from "zod";
 import { ZodBase } from "./base.zod";
 
 export abstract class ScenarioZSchema extends ZodBase {
-
   // ── shared primitives ──────────────────────────────
   static readonly HoursWindow = z.array(z.number().int().min(0).max(23));
 
@@ -31,7 +30,7 @@ export abstract class ScenarioZSchema extends ZodBase {
     hours: z.array(this.HourEntry).length(24),
     battery: this.Battery,
   }).superRefine((data, ctx) => {
-    const hourSet = new Set(data.hours.map(h => h.hour));
+    const hourSet = new Set(data.hours.map((h) => h.hour));
     if (hourSet.size !== 24) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -60,12 +59,14 @@ export abstract class ScenarioZSchema extends ZodBase {
     max_grid_kwh: z.number().nonnegative(),
   });
 
-  static readonly StructuredAdjustment = z.union([
-    this.SolarReductionAdjustment,
-    this.MinimumBatteryReserveAdjustment,
-    this.MaxGridWindowAdjustment,
-    this.NoChargeWindowAdjustment, // same shape as NoDischargeWindowAdjustment
-  ]).nullable();
+  static readonly StructuredAdjustment = z
+    .union([
+      this.SolarReductionAdjustment,
+      this.MinimumBatteryReserveAdjustment,
+      this.MaxGridWindowAdjustment,
+      this.NoChargeWindowAdjustment, // same shape as NoDischargeWindowAdjustment
+    ])
+    .nullable();
 
   static readonly DirectiveType = z.enum([
     "solar_reduction",
@@ -76,23 +77,28 @@ export abstract class ScenarioZSchema extends ZodBase {
     "no_op",
   ]);
 
-  static readonly DirectiveInterpretation = z.object({
-    note_index: z.number().int().min(0),
-    applies: z.boolean(),
-    directive_type: this.DirectiveType,
-    structured_adjustment: this.StructuredAdjustment,
-    explanation: z.string(),
-  }).superRefine((data, ctx) => {
-    const isNoOp = data.directive_type === "no_op";
-    if (isNoOp !== (data.applies === false) || isNoOp !== (data.structured_adjustment === null)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: isNoOp
-          ? "no_op requires applies=false and structured_adjustment=null"
-          : "non-no_op directives require applies=true and a structured_adjustment",
-      });
-    }
-  });
+  static readonly DirectiveInterpretation = z
+    .object({
+      note_index: z.number().int().min(0),
+      applies: z.boolean(),
+      directive_type: this.DirectiveType,
+      structured_adjustment: this.StructuredAdjustment,
+      explanation: z.string(),
+    })
+    .superRefine((data, ctx) => {
+      const isNoOp = data.directive_type === "no_op";
+      if (
+        isNoOp !== (data.applies === false) ||
+        isNoOp !== (data.structured_adjustment === null)
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: isNoOp
+            ? "no_op requires applies=false and structured_adjustment=null"
+            : "non-no_op directives require applies=true and a structured_adjustment",
+        });
+      }
+    });
 
   // ── response ─────────────────────────────────────────
   static readonly BatteryAction = z.enum(["charge", "discharge", "idle"]);
@@ -118,15 +124,33 @@ export abstract class ScenarioZSchema extends ZodBase {
 
 export type HourEntry = z.infer<typeof ScenarioZSchema.HourEntry>;
 export type Battery = z.infer<typeof ScenarioZSchema.Battery>;
-export type OptimizeEnergyRequest = z.infer<typeof ScenarioZSchema.OptimizeEnergyRequest>;
+export type OptimizeEnergyRequest = z.infer<
+  typeof ScenarioZSchema.OptimizeEnergyRequest
+>;
 export type DirectiveType = z.infer<typeof ScenarioZSchema.DirectiveType>;
-export type SolarReductionAdjustment = z.infer<typeof ScenarioZSchema.SolarReductionAdjustment>;
-export type MinimumBatteryReserveAdjustment = z.infer<typeof ScenarioZSchema.MinimumBatteryReserveAdjustment>;
-export type NoChargeWindowAdjustment = z.infer<typeof ScenarioZSchema.NoChargeWindowAdjustment>;
-export type NoDischargeWindowAdjustment = z.infer<typeof ScenarioZSchema.NoDischargeWindowAdjustment>;
-export type MaxGridWindowAdjustment = z.infer<typeof ScenarioZSchema.MaxGridWindowAdjustment>;
-export type StructuredAdjustment = z.infer<typeof ScenarioZSchema.StructuredAdjustment>;
-export type DirectiveInterpretation = z.infer<typeof ScenarioZSchema.DirectiveInterpretation>;
+export type SolarReductionAdjustment = z.infer<
+  typeof ScenarioZSchema.SolarReductionAdjustment
+>;
+export type MinimumBatteryReserveAdjustment = z.infer<
+  typeof ScenarioZSchema.MinimumBatteryReserveAdjustment
+>;
+export type NoChargeWindowAdjustment = z.infer<
+  typeof ScenarioZSchema.NoChargeWindowAdjustment
+>;
+export type NoDischargeWindowAdjustment = z.infer<
+  typeof ScenarioZSchema.NoDischargeWindowAdjustment
+>;
+export type MaxGridWindowAdjustment = z.infer<
+  typeof ScenarioZSchema.MaxGridWindowAdjustment
+>;
+export type StructuredAdjustment = z.infer<
+  typeof ScenarioZSchema.StructuredAdjustment
+>;
+export type DirectiveInterpretation = z.infer<
+  typeof ScenarioZSchema.DirectiveInterpretation
+>;
 export type BatteryAction = z.infer<typeof ScenarioZSchema.BatteryAction>;
 export type HourlyPlanEntry = z.infer<typeof ScenarioZSchema.HourlyPlanEntry>;
-export type OptimizeEnergyResponse = z.infer<typeof ScenarioZSchema.OptimizeEnergyResponse>;
+export type OptimizeEnergyResponse = z.infer<
+  typeof ScenarioZSchema.OptimizeEnergyResponse
+>;

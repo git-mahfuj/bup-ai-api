@@ -1,1 +1,1 @@
-export * from "./Scenario.controller"
+export * from "./Scenario.controller";

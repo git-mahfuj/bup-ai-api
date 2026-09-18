@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "bupai": {
+      "url": "http://localhost:3000"
+    }
+  }
+}

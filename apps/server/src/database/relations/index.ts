@@ -1,1 +1,1 @@
-export * from "./data.relation"
+export * from "./data.relation";

@@ -1,1 +1,1 @@
-export * from "./scenario.repository"
+export * from "./scenario.repository";

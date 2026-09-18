@@ -27,6 +27,7 @@
     "@anthropic-ai/sdk": "^0.126.0",
     "@modelcontextprotocol/client": "^2.0.0",
     "express": "^5.2.1",
+    "javascript-lp-solver": "^1.0.3",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
     "pino-pretty": "^13.1.3"

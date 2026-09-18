@@ -1,6 +1,18 @@
+// mcp.client.service.ts
 import { injectable } from "inversify";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import {
+  Client,
+  StreamableHTTPClientTransport,
+} from "@modelcontextprotocol/client";
+
+function extractJson(raw: string): string {
+  const fenced = raw.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (fenced) return fenced[1]!.trim();
+  const start = raw.indexOf("{");
+  const end = raw.lastIndexOf("}");
+  if (start !== -1 && end !== -1) return raw.slice(start, end + 1);
+  return raw.trim();
+}
 
 @injectable()
 export class McpClientService {
@@ -10,17 +22,15 @@ export class McpClientService {
   private async getClient(): Promise<Client> {
     if (this.client) return this.client;
     if (this.connecting) return this.connecting;
-
     this.connecting = (async () => {
       const transport = new StreamableHTTPClientTransport(
-        new URL(process.env.MCP_SERVER_URL ?? "http://localhost:4100/mcp")
+        new URL(process.env.MCP_SERVER_URL ?? "http://localhost:3000/mcp")
       );
       const client = new Client({ name: "gridwise-api", version: "1.0.0" });
       await client.connect(transport);
       this.client = client;
       return client;
     })();
-
     return this.connecting;
   }
 
@@ -33,14 +43,27 @@ export class McpClientService {
 
     if (result.isError) {
       const text =
-        result.content?.[0]?.type === "text" ? result.content[0].text : "MCP tool error";
+        result.content?.[0]?.type === "text"
+          ? result.content[0].text
+          : "MCP tool error";
       throw new Error(text);
     }
 
-    const contentBlock = result.content?.[0];
-    const raw =
-      contentBlock?.type === "text" ? contentBlock.text : JSON.stringify(contentBlock);
+    // @ts-ignore
+    const raw = result.structuredContent?.result;
 
-    return JSON.parse(raw) as TResult;
+    if (typeof raw !== "string") {
+      throw new Error(
+        `MCP tool "${name}" returned no structuredContent.result`
+      );
+    }
+
+    try {
+      return JSON.parse(raw) as TResult;
+    } catch {
+      throw new Error(
+        `MCP tool "${name}" returned non-JSON output: ${raw.slice(0, 200)}`
+      );
+    }
   }
 }
