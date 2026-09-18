@@ -73,4 +73,11 @@ app.get("/metrics", async (_req, res) => {
 app.use(errorHandlerMiddleware);
 
 // Start Server
-export default app;
+app.listen(baseConfig.PORT, async () => {
+  console.log(`                                      
+ Listening...                  Port: ${baseConfig.PORT}`);
+  console.log(
+    " Redis: ",
+    (await redisClient.ping()) === "PONG" ? "Working ✅" : "ᶻ 𝗓 𐰁"
+  );
+});
