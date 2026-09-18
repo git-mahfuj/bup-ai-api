@@ -7,6 +7,6 @@ export type BaseConfigType = {
 
 export const baseConfig: BaseConfigType = {
   DATABASE_URL: String(process.env.DATABASE_URL),
-  PORT: String(process.env.PORT),
+  PORT: Number(process.env.PORT),
   NODE_ENV: String(process.env.NODE_ENV),
 };

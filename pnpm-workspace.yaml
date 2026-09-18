@@ -4,3 +4,4 @@ packages:
 allowBuilds:
   '@modelcontextprotocol/inspector': true
   esbuild: true
+  protobufjs: true

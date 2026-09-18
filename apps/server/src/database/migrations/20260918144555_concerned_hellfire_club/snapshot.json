@@ -1,0 +1,816 @@
+{
+  "version": "8",
+  "dialect": "postgres",
+  "id": "4b1adfd9-80f7-4a49-a977-612e26244756",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "ddl": [
+    {
+      "values": [
+        "charge",
+        "discharge",
+        "idle"
+      ],
+      "name": "battery_action",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "solar_reduction",
+        "minimum_battery_reserve",
+        "no_charge_window",
+        "no_discharge_window",
+        "max_grid_window",
+        "no_op"
+      ],
+      "name": "directive_type",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "batteries",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "directive_interpretations",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "hourly_inputs",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "hourly_plans",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "operator_notes",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "optimization_results",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "scenarios",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "batteries"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "scenario_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "batteries"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "capacity_kwh",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "batteries"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "initial_energy_kwh",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "batteries"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "minimum_energy_kwh",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "batteries"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "max_charge_kwh_per_hour",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "batteries"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "max_discharge_kwh_per_hour",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "batteries"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "directive_interpretations"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "scenario_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "directive_interpretations"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "note_index",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "directive_interpretations"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "applies",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "directive_interpretations"
+    },
+    {
+      "type": "directive_type",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "directive_type",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "directive_interpretations"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "structured_adjustment",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "directive_interpretations"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "explanation",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "directive_interpretations"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_inputs"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "scenario_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_inputs"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "hour",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_inputs"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "demand_kwh",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_inputs"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "solar_kwh",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_inputs"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "tariff_bdt_per_kwh",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_inputs"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_plans"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "scenario_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_plans"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "hour",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_plans"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "grid_kwh",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_plans"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "solar_used_kwh",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_plans"
+    },
+    {
+      "type": "battery_action",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "battery_action",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_plans"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "battery_kwh",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_plans"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "battery_energy_after_kwh",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "hourly_plans"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "operator_notes"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "scenario_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "operator_notes"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "note_index",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "operator_notes"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "note_text",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "operator_notes"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "optimization_results"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "scenario_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "optimization_results"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "total_grid_kwh",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "optimization_results"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "total_cost_bdt",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "optimization_results"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "peak_grid_kwh",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "optimization_results"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "plan_summary",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "optimization_results"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "scenarios"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "scenario_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "scenarios"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "scenarios"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "scenarios"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "scenario_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "scenarios",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "batteries_scenario_id_scenarios_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "batteries"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "scenario_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "scenarios",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "directive_interpretations_scenario_id_scenarios_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "directive_interpretations"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "scenario_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "scenarios",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "hourly_inputs_scenario_id_scenarios_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "hourly_inputs"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "scenario_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "scenarios",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "hourly_plans_scenario_id_scenarios_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "hourly_plans"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "scenario_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "scenarios",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "operator_notes_scenario_id_scenarios_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "operator_notes"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "scenario_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "scenarios",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "optimization_results_scenario_id_scenarios_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "optimization_results"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "batteries_pkey",
+      "schema": "public",
+      "table": "batteries",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "directive_interpretations_pkey",
+      "schema": "public",
+      "table": "directive_interpretations",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "hourly_inputs_pkey",
+      "schema": "public",
+      "table": "hourly_inputs",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "hourly_plans_pkey",
+      "schema": "public",
+      "table": "hourly_plans",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "operator_notes_pkey",
+      "schema": "public",
+      "table": "operator_notes",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "optimization_results_pkey",
+      "schema": "public",
+      "table": "optimization_results",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "scenarios_pkey",
+      "schema": "public",
+      "table": "scenarios",
+      "entityType": "pks"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "scenario_id"
+      ],
+      "nullsNotDistinct": false,
+      "name": "optimization_results_scenario_id_key",
+      "schema": "public",
+      "table": "optimization_results",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "scenario_id"
+      ],
+      "nullsNotDistinct": false,
+      "name": "scenarios_scenario_id_key",
+      "schema": "public",
+      "table": "scenarios",
+      "entityType": "uniques"
+    }
+  ],
+  "renames": []
+}

@@ -1,68 +1,128 @@
-name: Nebula MCP
+name: BUP API SERVER
 
 services:
+  # server:
+  #   depends_on:
+  #     - "redis"
+  #     - "redis_insight"
+  #     - "postgres"
+  #     - "grafana_loki"
+  #   build:
+  #     context: .
+  #     dockerfile: ./Dockerfile.dev
+  #   container_name: bupapi-server
+  #   env_file:
+  #     - ./.env.production.local
+  #   ports:
+  #     - 3000:3000
+  #   networks:
+  #     - bupapi
+  #   develop:
+  #     watch:
+  #       - action: sync
+  #         path: ./src
+  #         target: /app/src
+  #         ignore:
+  #           - node_modules/
+
+  #       - action: rebuild
+  #         path: package.json
+
+  #       - action: restart
+  #         path: ./.env
+
   postgres:
     image: postgres:latest
-    container_name: nebula-postgres
+    container_name: bupapi-postgres
     ports:
       - 5432:5432
     networks:
-      - nebula
+      - bupapi
     volumes:
-      - nebula_pgData:/var/lib/postgresql/MAJOR/docker
+      - bupapi_pgData:/var/lib/postgresql/MAJOR/docker
     environment:
       - POSTGRES_PASSWORD=postgres
   redis:
     image: redis:latest
-    container_name: nebula-redis-server
+    container_name: bupapi-redis-server
     ports:
       - 6379:6379
     networks:
-      - nebula
+      - bupapi
     volumes:
-      - nebula_redis:/data
+      - bupapi_redis:/data
   redis_insight:
     depends_on:
       - "redis"
     image: redis/redisinsight:latest
-    container_name: nebula-redisinsight
+    container_name: bupapi-redisinsight
     volumes:
-      - nebula_redisinsight:/data
+      - bupapi_redisinsight:/data
     ports:
       - 5540:5540
     networks:
-      - nebula
+      - bupapi
     environment:
-      - RI_REDIS_HOST_0=nebula-redis-server
+      - RI_REDIS_HOST_0=bupapi-redis-server
       - RI_REDIS_PORT_0=6379
       - RI_REDIS_USERNAME_0=default
       - RI_REDIS_PASSWORD_0=default
-  mongodb:
-      image: mongodb/mongodb-atlas-local:preview
-      hostname: mongodb
-      environment:
-         - MONGODB_INITDB_ROOT_USERNAME=admin
-         - MONGODB_INITDB_ROOT_PASSWORD=admin
-         - VOYAGE_API_KEY=${VOYAGE_AI_API_KEY}
-      ports:
-         - 27017:27017
-      networks:
-         - nebula
-      volumes:
-         - ./init:/docker-entrypoint-initdb.d
-         - mongoDb:/data/db
-         - configMongoDb:/data/configdb
-         - mongot:/data/mongot
+  # prometheus:
+  #   depends_on:
+  #     - "server"
+  #   image: prom/prometheus
+  #   container_name: prometheus-server
+  #   networks:
+  #     - bupapi
+  #   volumes:
+  #     - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+  #   ports:
+  #     - 9090:9090
+  # grafana:
+  #   depends_on:
+  #     - "prometheus"
+  #   image: grafana/grafana-oss
+  #   container_name: grafana
+  #   networks:
+  #     - bupapi
+  #   ports:
+  #     - 3005:3000
+  #   volumes:
+  #     - grafana-oss-storage:/var/lib/grafana
+  # grafana_loki:
+  #   image: grafana/loki
+  #   container_name: bupapi-loki
+  #   networks:
+  #     - bupapi
+  #   ports:
+  #     - 3100:3100
+  # mongodb:
+  #   image: mongodb/mongodb-atlas-local:preview
+  #   hostname: mongodb
+  #   environment:
+  #     - MONGODB_INITDB_ROOT_USERNAME=admin
+  #     - MONGODB_INITDB_ROOT_PASSWORD=admin
+  #     - VOYAGE_API_KEY=${VOYAGE_AI_API_KEY}
+  #   ports:
+  #     - 27017:27017
+  #   networks:
+  #     - bupapi
+  #   volumes:
+  #     - ./init:/docker-entrypoint-initdb.d
+  #     - mongoDb:/data/db
+  #     - configMongoDb:/data/configdb
+  #     - mongot:/data/mongot
 
 networks:
-  nebula:
+  bupapi:
     driver: bridge
-    name: nebula
+    name: bupapi
 
 volumes:
-  nebula_pgData:
-  nebula_redis:
-  nebula_redisinsight:
+  bupapi_pgData:
+  bupapi_redis:
+  bupapi_redisinsight:
+  grafana-oss-storage:
   mongoDb:
   configMongoDb:
   mongot:

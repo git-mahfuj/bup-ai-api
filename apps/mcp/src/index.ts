@@ -2,7 +2,7 @@ import { toNodeHandler } from "@modelcontextprotocol/node";
 import { createMcpHandler, McpServer } from "@modelcontextprotocol/server";
 import { createServer } from "node:http";
 import { baseConfig } from "./config";
-import { EquationTools } from "./tools";
+import { NoteInterpretationTools } from "./tools";
 import { GreetingResource } from "./resources";
 // import { connectRedis } from "./lib/redis";
 
@@ -10,7 +10,7 @@ const handler = createMcpHandler(() => {
   const server = new McpServer({ name: "greeting-server", version: "1.0.0" });
 
   // Register tools
-  new EquationTools(server).init();
+  new NoteInterpretationTools(server).init();
 
   // Register resources
   new GreetingResource(server).init();
@@ -25,16 +25,6 @@ const nodeHandler = toNodeHandler(handler);
 createServer(async (req, res) => {
   void nodeHandler(req, res);
 }).listen(baseConfig.PORT, "127.0.0.1", () => {
-  console.log(`                                                                                                         
-               █             ███                                      
- ██   █        █               █                  █▒  ▒█  ░███▒ █████░
- ██░  █        █               █                  ██  ██ ░█▒ ░█ █   ▓█
- █▒▓  █  ███   █▓██   █   █    █    ░███░         ██░░██ █▒     █    █
- █ █  █ ▓▓ ▒█  █▓ ▓█  █   █    █    █▒ ▒█         █▒▓▓▒█ █      █   ▓█
- █ ▓▓ █ █   █  █   █  █   █    █        █         █ ██ █ █      █████░
- █  █ █ █████  █   █  █   █    █    ▒████         █ █▓ █ █      █     
- █  ▓▒█ █      █   █  █   █    █    █▒  █         █    █ █▒     █     
- █  ░██ ▓▓  █  █▓ ▓█  █▒ ▓█    █░   █░ ▓█         █    █ ░█▒ ░▓ █     
- █   ██  ███▒  █▓██   ▒██▒█    ▒██  ▒██▒█         █    █  ▒███▒ █                                                                                                                                  
- Listening...                                               Port: ${baseConfig.PORT}`);
+  console.log(`                                                                                                                                                                                                                                     
+ Listening...  Port: ${baseConfig.PORT}`);
 });
