@@ -79,8 +79,8 @@ COPY --from=builder --chown=express:nodejs /app/node_modules ./node_modules/
 COPY --from=builder --chown=express:nodejs /app/apps/server/dist ./apps/server/dist/
 COPY --from=builder --chown=express:nodejs /app/packages/ ./packages/
 
-EXPOSE 3000
-ENV PORT=3000
+EXPOSE 5000
+ENV PORT=5000
 ENV HOSTNAME="0.0.0.0"
 
 CMD [ "node", "apps/server/dist/index.mjs" ]

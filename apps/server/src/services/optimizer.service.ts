@@ -96,6 +96,7 @@ export class OptimizerService {
           for (const h of hrs) maxGrid[h] = Math.min(maxGrid[h]!, max_grid_kwh);
           break;
         }
+        // @ts-ignore
         case "no_op":
           break;
       }

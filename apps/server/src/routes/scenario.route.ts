@@ -19,11 +19,6 @@ export class ScenarioRouter implements IRouter {
       "/optimize-energy",
       this.scenarioController.optimizeEnergy.bind(this.scenarioController)
     );
-
-    this.router.get(
-      "/:scenarioId",
-      this.scenarioController.getScenario.bind(this.scenarioController)
-    );
   }
 
   getRouters(): Router {

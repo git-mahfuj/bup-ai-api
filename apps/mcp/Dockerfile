@@ -1,12 +1,24 @@
 FROM node:24-alpine AS base
 
+# ******************************PRUNE THE PROJECT*********************************
+FROM base AS pruner
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+RUN npm install -g turbo
+COPY . .
+RUN turbo prune mcp --docker
+
 # ******************************INSTALLATION**************************************
 FROM base AS installer
 
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* pnpm-workspace.yaml* .npmrc* ./
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=pruner /app/turbo.json ./turbo.json
 
 # Install project dependencies with frozen lockfile for reproducible builds
 RUN --mount=type=cache,target=/root/.npm \
@@ -27,34 +39,51 @@ FROM base AS builder
 
 WORKDIR /app
 
-# Copy project dependencies from installer stage
-COPY --from=installer /app/node_modules ./node_modules
-COPY . .
 
+COPY --from=installer /app/ .
+COPY --from=pruner /app/out/full/ .
+
+
+ENV TURBO_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+
+# Build the main app
 RUN if [ -f package-lock.json ]; then \
-    npm run build; \
+    npm turbo run build; \
   elif [ -f yarn.lock ]; then \
-    corepack enable yarn && yarn build; \
+    corepack enable yarn && yarn turbo run build; \
   elif [ -f pnpm-lock.yaml ]; then \
-    corepack enable pnpm && pnpm build; \
+    corepack enable pnpm &&  pnpm turbo run build; \
   else \
     echo "No lockfile found." && exit 1; \
   fi
+
 
 # ******************************RUN THE APP***********************************
 FROM base AS runner
 WORKDIR /app
 
+
+ENV TURBO_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 mcp
 
-COPY --from=builder --chown=mcp:nodejs  /app/package*.json .
-COPY --from=builder --chown=mcp:nodejs  /app/node_modules ./node_modules
-COPY --from=builder --chown=mcp:nodejs  /app/dist ./dist
+USER mcp
+
+COPY --from=builder --chown=express:nodejs  /app/apps/mcp/package*.json ./apps/mcp/
+# copy mcp node_modules
+COPY --from=builder --chown=express:nodejs /app/apps/mcp/node_modules ./apps/mcp/node_modules/
+# copry root node_modules
+COPY --from=builder --chown=express:nodejs /app/node_modules ./node_modules/
+COPY --from=builder --chown=express:nodejs /app/apps/mcp/dist ./apps/mcp/dist/
+COPY --from=builder --chown=express:nodejs /app/packages/ ./packages/
 
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD [ "node", "dist/index.mjs" ]
+CMD [ "node", "apps/mcp/dist/index.mjs" ]
