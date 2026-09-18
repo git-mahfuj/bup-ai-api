@@ -3,7 +3,6 @@ import type { Express } from "express";
 import requestIp from "request-ip";
 import cookieParser from "cookie-parser";
 import cors, { type CorsOptions } from "cors";
-import { ApiRouter } from "./routes";
 
 type ExpressServerConstructorTypes = {
   corsOptions?: CorsOptions;

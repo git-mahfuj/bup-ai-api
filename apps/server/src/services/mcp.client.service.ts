@@ -1,5 +1,5 @@
 // mcp.client.service.ts
-import "dotenv/config"
+import "dotenv/config";
 import { injectable } from "inversify";
 import {
   Client,
