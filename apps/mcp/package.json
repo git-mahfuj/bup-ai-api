@@ -1,0 +1,48 @@
+{
+  "name": "mcp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsx --watch src/index.ts",
+    "build": "tsdown",
+    "build:watch": "tsdown --watch",
+    "server:inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector http://127.0.0.1:3000/mcp",
+    "format": "prettier --write \"**/*.{ts,md,json}\"",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio --verbose",
+    "db:push": "drizzle-kit push",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check:types": "node ./node_modules/typescript-7/bin/tsc --noEmit"
+ 
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nodejsboilerplate/mcp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/nodejsboilerplate/mcp/issues"
+  },
+  "homepage": "https://github.com/nodejsboilerplate/mcp#readme",
+
+  "dependencies": {
+    "@langchain/core": "^1.2.10",
+    "@langchain/mongodb": "^1.3.0",
+    "@langchain/textsplitters": "^1.0.1",
+    "@modelcontextprotocol/node": "^2.0.0",
+    "@modelcontextprotocol/server": "^2.0.0",
+    "mongodb": "^7.5.0",
+    "mongoose": "^9.10.0"
+  },
+  "devDependencies": {
+    "conventional-changelog-conventionalcommits": "^10.4.0",
+    "@eslint/js": "^10.0.1",
+    "@modelcontextprotocol/inspector": "^2.6.0",
+    "drizzle-kit": "1.0.0-rc.4"
+  }
+}

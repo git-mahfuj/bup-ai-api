@@ -1,0 +1,6 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+allowBuilds:
+  '@modelcontextprotocol/inspector': true
+  esbuild: true
