@@ -43,6 +43,14 @@ WORKDIR /app
 COPY --from=installer /app/ .
 COPY --from=pruner /app/out/full/ .
 
+# Danger Don't do it
+# Use AWS SSM
+ARG PORT
+ARG GROQ_API_KEY
+
+ENV PORT=${PORT} \
+    GROQ_API_KEY=${GROQ_API_KEY}
+
 
 ENV TURBO_TELEMETRY_DISABLED=1
 ENV NEXT_TELEMETRY_DISABLED=1

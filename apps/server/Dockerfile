@@ -1,8 +1,5 @@
 FROM node:24-alpine AS base
 
-
-
-
 # ******************************PRUNE THE PROJECT*********************************
 FROM base AS pruner
 RUN apk add --no-cache libc6-compat
@@ -49,6 +46,24 @@ COPY --from=pruner /app/out/full/ .
 ENV TURBO_TELEMETRY_DISABLED=1
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+
+# Danger Don't do it
+# Use AWS SSM
+ARG PORT
+ARG NODE_ENV
+ARG DATABASE_URL
+ARG REDIS_USERNAME
+ARG REDIS_PASSWORD
+ARG REDIS_HOST
+ARG REDIS_PORT
+
+ENV PORT=${PORT} \
+    NODE_ENV=${NODE_ENV} \
+    DATABASE_URL=${DATABASE_URL} \
+    REDIS_USERNAME=${REDIS_USERNAME} \
+    REDIS_PASSWORD=${REDIS_PASSWORD} \
+    REDIS_HOST=${REDIS_HOST} \
+    REDIS_PORT=${REDIS_PORT} 
 
 # Build the main app
 RUN if [ -f package-lock.json ]; then \
