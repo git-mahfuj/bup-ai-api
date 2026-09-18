@@ -1,159 +1,29 @@
-# Turborepo starter
+# How The System Is Working?
 
-This Turborepo starter is maintained by the Turborepo core team.
+I's role (LLM Interpreter)
+- **Job**: Convert 1-3 free-text operator notes → structured directives (`solar_reduction`, `no_charge_window`, etc.) or `no_op`.
+- **Where**: `McpInterpretationService` calls an MCP tool (`interpret_operator_notes`) which internally runs the LLM.
+- **Why it's isolated**: LLM output is treated as **untrusted** — it never touches the optimizer directly. It's parsed, then validated against `DirectiveInterpretationArraySchema` (Zod) before use. This matches the spec's guardrail requirement (Section 08): "LLM output must be treated as untrusted structured data until deterministic validation passes."
+- **What it does NOT do**: touch demand/tariff/battery numbers, decide the schedule, or compute cost. Pure language → structured-directive translation only.
 
-## Using this example
+## Deterministic systems (non-AI)
 
-Run the following command:
+| System | Role |
+|---|---|
+| **Zod validators** (`ScenarioInputValidators`, `DirectiveInterpretationArraySchema`) | Reject malformed HTTP input and malformed LLM output before either reaches business logic |
+| **OptimizerService** (LP solver via `javascript-lp-solver`) | Takes base scenario + validated directives → builds a linear program (grid/solar/charge/discharge variables per hour, energy-balance & battery constraints) → minimizes total grid cost |
+| **ScenarioRepository** (Drizzle/Postgres) | Persists scenario, battery, hourly inputs, notes, interpretations, plan, and result — one row set per stage of the pipeline |
+| **ScenarioService** | Orchestrates: validate → persist input → call LLM → persist interpretation → run optimizer → persist plan → return response |
+| **ScenarioController** | HTTP boundary — maps service output/errors to status codes (`400`/`422`/`500`) |
 
-```sh
-npx create-turbo@latest
+## End-to-end flow
+```
+HTTP request → Zod validate → DB save (scenario/battery/hours/notes)
+   → LLM interprets notes (MCP tool)
+   → Zod validate LLM output (guardrail)
+   → OptimizerService builds LP model + solves
+   → DB save (interpretation, hourly_plan, result)
+   → Return JSON response
 ```
 
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `@next/eslint-plugin-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo build
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo build
-pnpm exec turbo build
-pnpm exec turbo build
-```
-
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo build --filter=docs
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-pnpm exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-pnpm exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-pnpm exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+**Core idea from the spec, reflected in code**: AI handles *language understanding only*; every number in the final schedule comes from the deterministic LP solver, and every directive shape is checked by Zod before it can influence that solver. This is why a hallucinated directive type or malformed hours array fails validation instead of corrupting the schedule.

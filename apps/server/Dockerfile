@@ -1,6 +1,8 @@
 FROM node:24-alpine AS base
 
 
+
+
 # ******************************PRUNE THE PROJECT*********************************
 FROM base AS pruner
 RUN apk add --no-cache libc6-compat

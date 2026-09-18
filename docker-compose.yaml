@@ -14,7 +14,7 @@ services:
     env_file:
       - ./apps/server/.env.production.local
     ports:
-      - 3000:3000
+      - 5000:5000
     networks:
       - bupapi
     develop:
@@ -39,7 +39,7 @@ services:
     build:
       context: .
       dockerfile: ./apps/mcp/Dockerfile
-    container_name: bupapi-server
+    container_name: bupapi-mcp
     env_file:
       - ./apps/mcp/.env.production.local
     ports:
